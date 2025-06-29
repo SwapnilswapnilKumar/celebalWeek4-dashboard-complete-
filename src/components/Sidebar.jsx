@@ -29,7 +29,7 @@ const Sidebar = () => {
               onClick={handleCloseSideBar}
               className="items-center gap-3 ml-3 mt-4 flex text-2xl font-bold tracking-tight dark:text-white text-gray-900"
             >
-              <SiShopware /> <span>Shoppy</span>
+              <SiShopware /> <span>Dashboard</span>
             </Link>
 
             <button
