@@ -1,5 +1,5 @@
 import React from 'react';
-import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutlineBarChart, AiOutlineStock } from 'react-icons/ai';
+import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutlineBarChart, AiOutlineStock,AiOutlineTable } from 'react-icons/ai';
 import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart } from 'react-icons/fi';
 import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft } from 'react-icons/bs';
 import { BiColorFill } from 'react-icons/bi';
@@ -21,6 +21,21 @@ import product5 from './product5.jpg';
 import product6 from './product6.jpg';
 import product7 from './product7.jpg';
 import product8 from './product8.jpg';
+
+export const productsTableData = [
+  { id: 1, name: 'iPhone 15', category: 'Electronics', price: 999, stock: 50 },
+  { id: 2, name: 'Samsung Galaxy S24', category: 'Electronics', price: 899, stock: 30 },
+  { id: 3, name: 'MacBook Air M2', category: 'Laptops', price: 1199, stock: 20 },
+  { id: 4, name: 'Sony WH-1000XM5', category: 'Audio', price: 349, stock: 100 },
+];
+
+
+export const tableData = [
+  { id: 1, name: 'Product A', sales: 1200, revenue: '$1500' },
+  { id: 2, name: 'Product B', sales: 800, revenue: '$1000' },
+  { id: 3, name: 'Product C', sales: 450, revenue: '$700' },
+  { id: 4, name: 'Product D', sales: 300, revenue: '$500' },
+];
 
 
 
@@ -441,6 +456,10 @@ export const links = [
         name: 'kanban',
         icon: <BsKanban />,
       },
+      {
+        name:'table',
+        icon:<AiOutlineTable />,
+      }
       
     ],
   },

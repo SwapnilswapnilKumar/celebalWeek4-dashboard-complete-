@@ -1,101 +1,83 @@
 import React, { useState } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { kanbanData } from '../data/dummy';
-import { Header } from '../components';
+import { productsTableData } from '../data/dummy';
 
-const initialColumns = {
-  'To Do': kanbanData.filter((item) => item.Status === 'To Do'),
-  'In Progress': kanbanData.filter((item) => item.Status === 'In Progress'),
-  'Testing': kanbanData.filter((item) => item.Status === 'Testing'),
-  'Done': kanbanData.filter((item) => item.Status === 'Done'),
-};
+const ProductTable = () => {
+  const [items, setItems] = useState(productsTableData);
 
-const Kanban = () => {
-  const [columns, setColumns] = useState(initialColumns);
+  const handleDragEnd = (result) => {
+    if (!result.destination) return;
 
-  const onDragEnd = (result) => {
-    const { source, destination } = result;
+    const reorderedItems = Array.from(items);
+    const [removed] = reorderedItems.splice(result.source.index, 1);
+    reorderedItems.splice(result.destination.index, 0, removed);
 
-    if (!destination) return;
-
-    const sourceCol = source.droppableId;
-    const destCol = destination.droppableId;
-
-    const sourceItems = [...columns[sourceCol]];
-    const destItems = [...columns[destCol]];
-
-    const [movedItem] = sourceItems.splice(source.index, 1);
-
-    destItems.splice(destination.index, 0, movedItem);
-
-    setColumns({
-      ...columns,
-      [sourceCol]: sourceItems,
-      [destCol]: destItems,
-    });
+    setItems(reorderedItems);
   };
 
   return (
-    <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-      <Header category="App" title="Kanban" />
+    <Box sx={{ maxWidth: 800, margin: 'auto', mt: 4 }}>
+      <Typography variant="h5" fontWeight="bold" mb={2}>
+        Product Inventory (Drag to Reorder)
+      </Typography>
 
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Box display="flex" gap={2} overflow="auto">
-          {Object.entries(columns).map(([columnId, items]) => (
-            <Droppable droppableId={columnId} key={columnId}>
-              {(provided, snapshot) => (
-                <Paper
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  sx={{
-                    minWidth: 250,
-                    maxWidth: 300,
-                    backgroundColor: snapshot.isDraggingOver ? '#f0f0f0' : '#fafafa',
-                    p: 2,
-                    borderRadius: 2,
-                    boxShadow: 2,
-                  }}
-                >
-                  <Typography variant="h6" textAlign="center" mb={2}>
-                    {columnId}
-                  </Typography>
-
-                  {items.map((item, index) => (
-                    <Draggable draggableId={item.Id.toString()} index={index} key={item.Id}>
-                      {(provided, snapshot) => (
-                        <Box
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          sx={{
-                            mb: 2,
-                            p: 2,
-                            borderRadius: 1,
-                            backgroundColor: snapshot.isDragging ? '#e0f7fa' : '#ffffff',
-                            boxShadow: 1,
-                          }}
-                        >
-                          <Typography variant="subtitle1" fontWeight="bold">
-                            {item.Summary}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {item.Id}
-                          </Typography>
-                        </Box>
-                      )}
-                    </Draggable>
-                  ))}
-
-                  {provided.placeholder}
-                </Paper>
-              )}
-            </Droppable>
-          ))}
-        </Box>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="productList">
+          {(provided) => (
+            <Box
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+              }}
+            >
+              {items.map((product, index) => (
+                <Draggable key={product.id} draggableId={product.id.toString()} index={index}>
+                  {(provided, snapshot) => (
+                    <Paper
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      elevation={snapshot.isDragging ? 8 : 2}
+                      sx={{
+                        p: 2,
+                        borderRadius: 2,
+                        backgroundColor: snapshot.isDragging ? 'primary.light' : 'background.paper',
+                        transition: 'background-color 0.3s',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Box>
+                        <Typography variant="subtitle1" fontWeight="bold">
+                          {product.name}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Category: {product.category} | Price: ${product.price} | Stock: {product.stock}
+                        </Typography>
+                      </Box>
+                      <Typography
+                        variant="caption"
+                        color={product.stock > 0 ? 'green' : 'red'}
+                        sx={{ fontWeight: 600 }}
+                      >
+                        {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
+                      </Typography>
+                    </Paper>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </Box>
+          )}
+        </Droppable>
       </DragDropContext>
-    </div>
+    </Box>
   );
 };
 
-export default Kanban;
+export default ProductTable;

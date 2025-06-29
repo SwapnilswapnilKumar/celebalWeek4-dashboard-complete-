@@ -9,9 +9,7 @@ import { MantineProvider } from '@mantine/core';
 import { Navbar, Footer, Sidebar, ThemeSettings } from './components';
 import {
   Ecommerce, Orders, Calendar, Employees, Stacked,
-  Customers, Kanban, Line, Area, Bar, Pie, Financial
-  
-} from './pages';
+  Customers, Kanban, Line, Area, Bar, Pie, Financial,Table } from './pages';
 import './App.css';
 
 import { useStateContext } from './contexts/ContextProvider';
@@ -100,6 +98,7 @@ const App = () => {
                     {/* Apps */}
                     <Route path="/kanban" element={<Kanban />} />
                     <Route path="/calendar" element={<Calendar />} />
+                    <Route path="/table" element={<Table />} />
                     {/* Charts */}
                     <Route path="/line" element={<Line />} />
                     <Route path="/area" element={<Area />} />
